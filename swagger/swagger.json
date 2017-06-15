@@ -1,0 +1,156 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "NAONI API"
+  },
+  "host" : "www.naoni.ru",
+  "basePath" : "/api/v1/",
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "получение список подписок",
+        "operationId" : "SubscribesList",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Список всех подписок",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/subscribeInfo"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscribe" : {
+      "post" : {
+        "summary" : "оформить подписку",
+        "description" : "Добавить подписку",
+        "operationId" : "Subscribe",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Список на добавление",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/subscribe"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok"
+          },
+          "400" : {
+            "description" : "invalid input, object invalid"
+          }
+        }
+      }
+    },
+    "/unSubscribe" : {
+      "post" : {
+        "summary" : "отменить подписку",
+        "description" : "Отменить подписку",
+        "operationId" : "UnSubscribe",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Список на удаление",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/definitions/subscribe"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok"
+          },
+          "400" : {
+            "description" : "invalid input, object invalid"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "subscribe" : {
+      "type" : "object",
+      "required" : [ "provider", "providerId" ],
+      "properties" : {
+        "provider" : {
+          "type" : "string",
+          "description" : "Поставщик объявлений",
+          "enum" : [ "avito" ]
+        },
+        "providerId" : {
+          "type" : "string",
+          "format" : "int64",
+          "example" : "234562",
+          "description" : "ID объявления у поставщика"
+        }
+      }
+    },
+    "subscribeInfo" : {
+      "type" : "object",
+      "required" : [ "provider", "providerId", "ttl" ],
+      "properties" : {
+        "provider" : {
+          "type" : "string",
+          "description" : "Поставщик объявлений",
+          "enum" : [ "avito" ]
+        },
+        "providerId" : {
+          "type" : "string",
+          "format" : "int64",
+          "example" : "234562",
+          "description" : "ID объявления у поставщика"
+        },
+        "ttl" : {
+          "type" : "string",
+          "format" : "int64",
+          "example" : "34521",
+          "description" : "оставшееся время жизни подписки в секундах"
+        }
+      }
+    },
+    "advertScore" : {
+      "type" : "object",
+      "required" : [ "detailUrl", "provider", "providerId", "score" ],
+      "properties" : {
+        "provider" : {
+          "type" : "string",
+          "description" : "Поставщик объявлений",
+          "enum" : [ "avito" ]
+        },
+        "providerId" : {
+          "type" : "string",
+          "format" : "int64",
+          "example" : "234562",
+          "description" : "ID объявления у поставщика"
+        },
+        "score" : {
+          "type" : "string",
+          "description" : "оценка объявления",
+          "enum" : [ "green", "yellow", "red" ]
+        },
+        "detailUrl" : {
+          "type" : "string",
+          "example" : "http://www.naoni.ru/score/59404fb837279",
+          "description" : "ссылка на пояснение по выставленному балу"
+        }
+      }
+    }
+  }
+}
